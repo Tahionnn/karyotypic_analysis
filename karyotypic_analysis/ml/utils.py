@@ -119,9 +119,10 @@ def show_results(image, annotated_image_with_boxes, annotated_image_with_overlay
 
     detection_buffer = io.BytesIO()
     plt.savefig(detection_buffer, format='png', bbox_inches='tight')
-    detection_buffer.seek(0)
+    #detection_buffer.seek(0)
+    detection_buffer = detection_buffer.getvalue()
     
-    plt.close()
+    plt.close(fig)
 
     num_classes = len(class_images)
     plt.figure(figsize=(16, 5 * num_classes))
@@ -137,8 +138,8 @@ def show_results(image, annotated_image_with_boxes, annotated_image_with_overlay
 
             buffer_class = io.BytesIO()
             plt.savefig(buffer_class, format='png', bbox_inches='tight')
-            buffer_class.seek(0)
-            class_images_buffer.append(buffer_class)
+            #buffer_class.seek(0)
+            class_images_buffer.append(buffer_class.getvalue())
 
     plt.close()
 
