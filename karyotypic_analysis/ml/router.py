@@ -23,8 +23,3 @@ async def get_predictions(file: UploadFile = File(...)):
     detection_buffer, class_images_buffer = model.postprocess(image)
 
     return StreamingResponse(content=detection_buffer, media_type="image/png")
-
-    
-
-
-    
