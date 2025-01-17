@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from karyotypic_analysis.ml.router import ml_router
+from ml.router import ml_router
 from fastapi.middleware.cors import CORSMiddleware
 
 

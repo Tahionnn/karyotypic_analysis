@@ -2,11 +2,12 @@ from celery import shared_task
 import numpy as np
 import cv2
 import json
-from karyotypic_analysis.ml.YOLOv10 import YOLOv10
-from karyotypic_analysis.ml.utils import rescale_boxes
+from ml.YOLOv10 import YOLOv10
+from ml.utils import rescale_boxes
 
 
-model = YOLOv10(model_path="/home/tahion/Documents/GitHub/karyotypic_analysis/karyotypic_analysis/models/best.onnx")
+path="/app/ml_service/models/best.onnx"
+model = YOLOv10(model_path=path)
 model.load()
 
 

@@ -1,10 +1,10 @@
 from fastapi import HTTPException, File, UploadFile, Depends, APIRouter
 import asyncio
 
-from karyotypic_analysis.celery_app import app
+from ml_service.celery_app import app
 
-from karyotypic_analysis.ml.models import ResponseModel
-from karyotypic_analysis.ml.tasks import predict
+from ml.models import ResponseModel
+from ml.tasks import predict
 
 
 ml_router = APIRouter(prefix='/ml', tags=['Model endpoints'])

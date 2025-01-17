@@ -24,3 +24,23 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
+  ml:
+    build:
+      context: ./karyotypic-analysis/ml_service
+      dockerfile: Dockerfile
+    command: ["uvicorn", "ml_service.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  celery:
+    build:
+      context: ./karyotypic-analysis/ml_service
+      dockerfile: Dockerfile
+    command: ["celery", "-A", "ml_service.celery_app", "worker", "--loglevel=info"]
+    depends_on:
+      - redis
+      - rabbitmq
