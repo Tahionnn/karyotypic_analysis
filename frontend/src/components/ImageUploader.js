@@ -29,8 +29,8 @@ const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
         'F20': '75,0,130', // индиго
         'G21': '128,128,0', // оливковый
         'G22': '230,230,250', // лаванда
-        'X': '0,191,255', // глубокий небесный синий
-        'Y': '255,105,180' // ярко-розовый
+        'X': '255,105,180', // ярко-розовый
+        'Y': '0,191,255' // глубокий небесный синий 
     };
 
     const drawBoxes = (canvas, imageUrl, boxes) => {
@@ -164,7 +164,7 @@ const ImageUploader = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/raw_prediction', formData);
+            const response = await axios.post('http://127.0.0.1:8000/ml/predict', formData);
             const predictionData = {
                 boxes: response.data.boxes,
                 classes: response.data.classes,
