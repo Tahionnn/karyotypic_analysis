@@ -25,7 +25,7 @@ class Notebook(Base):
 
 class Image(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    image_src: Mapped[str]
+    image_src: Mapped[bytes]
     boxes: Mapped[dict] = mapped_column(JSON)
     notebook_id: Mapped[int] = mapped_column(ForeignKey("notebook.id"), nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=True)

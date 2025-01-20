@@ -8,7 +8,7 @@ from datetime import datetime
 from fastapi import HTTPException
 
 
-DATABASE_URL = 'postgresql+asyncpg://admin:password@localhost:5432/postgres'
+DATABASE_URL = 'postgresql+asyncpg://admin:password@postgres:5432/postgres'
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

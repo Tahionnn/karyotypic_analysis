@@ -10,6 +10,7 @@ from ..utils import commit_session
 from sqlalchemy import select, delete, update, join
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, timezone
+import base64
 
 
 user_router = APIRouter(prefix='/user', tags=['Users methods'])
@@ -72,7 +73,7 @@ async def get_notebooks_list(
         {
             "notebook_id": notebook.id,
             "notebook_title": notebook.title,
-            "image": notebook.image_src,
+            "image": base64.b64encode(notebook.image_src).decode('utf-8') if notebook.image_src else None,
             "boxes": notebook.boxes,
             "comment": notebook.comment
         }

@@ -15,7 +15,7 @@ import base64
 notebook_router = APIRouter(prefix='/notebooks', tags=['Notebooks methods'])
 
 
-@notebook_router.post("/add/")
+@notebook_router.post("/add")
 async def add_notebook(
     notebook: NotebookPublic, 
     current_user: Annotated[User, Depends(get_current_user)], 
@@ -29,6 +29,7 @@ async def add_notebook(
         user_id=notebook.user_id
     )
     session.add(db_notebook)
+    await commit_session(session)
 
     if notebook.image:
         image_data = base64.b64decode(notebook.image.image_src)
@@ -58,7 +59,7 @@ async def add_notebook(
 
 @notebook_router.get("/get/{notebook_id}") 
 async def get_notebook_by_id(
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: Annotated[User  , Depends(get_current_user)],
     notebook_id: int, 
     session: AsyncSession = Depends(get_session),
 ):
@@ -71,25 +72,31 @@ async def get_notebook_by_id(
             Image.boxes.label("boxes"),
             Comment.comment.label("comment")
         )
-        .join(Image, Image.notebook_id == Notebook.id)
-        .join(Comment, Comment.notebook_id == Notebook.id)
+        .outerjoin(Image, Image.notebook_id == Notebook.id)  
+        .outerjoin(Comment, Comment.notebook_id == Notebook.id)  
         .where(Notebook.id == notebook_id)
     )
-    result = await session.execute(query).scalars().first()
-    if result is None:
+    
+    result = await session.execute(query)
+    notebook_data = result.first()  
+
+    if notebook_data is None:
         raise HTTPException(status_code=404, detail="No matches found")
     
-    user_id = result[0].user_id 
-    if result.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Access forbidden")
-        return {
-        "id": result.id,
-        "title": result.title,
-        "user_id": result.user_id,
-        "image_src": base64.b64encode(result.image_src).decode('utf-8'),
-        "boxes": result.boxes,
-        "comment": result.comment
+    notebook_dict = {
+        "id": notebook_data.id,
+        "title": notebook_data.title,
+        "user_id": notebook_data.user_id,
+        "image_src": base64.b64encode(notebook_data.image_src).decode('utf-8') if notebook_data.image_src else None,
+        "boxes": notebook_data.boxes,
+        "comment": notebook_data.comment
     }
+
+    if notebook_dict['user_id'] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
+    return notebook_dict
+
 
 
 @notebook_router.delete("/delete/{notebook_id}")

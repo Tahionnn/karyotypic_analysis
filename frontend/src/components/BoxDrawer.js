@@ -1,3 +1,6 @@
+import React, { useState, useRef, useEffect } from 'react';
+
+
 const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
     const canvasRef1 = useRef(null); // Для обычных боксов
     const canvasRef2 = useRef(null); // Для заполненных боксов
@@ -133,3 +136,4 @@ const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
     );
 };
 
+export default BoxDrawer;
