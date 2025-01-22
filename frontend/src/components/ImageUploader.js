@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import Profile from './Profile.js';
 import BoxDrawer from './BoxDrawer.js';
 import MarkdownEditor from './MarkdownEditor.js';
 import Title from './Title.js';
@@ -69,6 +70,7 @@ const ImageUploader = () => {
 
     return (
         <div>
+            <Profile />
             <h1>Upload your Chromosome ;)</h1>
             <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFile} accept="image/*" required />

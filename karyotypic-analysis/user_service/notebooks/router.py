@@ -53,6 +53,7 @@ async def add_notebook(
     
     return {
         'response': Response(status_code=200),
+        'id': db_notebook.id,
         'message': f'added book with id={db_notebook.id} at {db_notebook.created_at}'
         }
 

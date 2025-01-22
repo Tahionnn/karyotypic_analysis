@@ -1,4 +1,5 @@
 from .schemas import Token
+from ..users.schemas import UserRegister
 from .utils import *
 from ..utils import commit_session
 
@@ -8,7 +9,7 @@ from fastapi import APIRouter
 auth_router = APIRouter(tags=['Auth methods'])
 
 
-@auth_router.post("/register/")
+@auth_router.post("/register")
 async def register_user(user_data: UserRegister, session: AsyncSession = Depends(get_session)):
     result_user = await session.execute(select(User).where(User.email == user_data.email))
     user = result_user.scalar_one_or_none()
@@ -24,7 +25,7 @@ async def register_user(user_data: UserRegister, session: AsyncSession = Depends
     await session.flush()
     await commit_session(session)
     
-    return {'message': f'{user_data.username} has been  registered'}
+    return {'message': f'{user_data.username} has been registered'}
 
 
 @auth_router.post("/token")
