@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styles from "../App.css";
 
 const Title = ({ value, onChange }) => {
   const [title, setTitle] = useState(value || '');
@@ -18,11 +19,12 @@ const Title = ({ value, onChange }) => {
   };
 
   return (
-    <div>
+    <div style={{ borderBottom: '1px solid rgb(218, 220, 224)', width: '100%' }}>
       {isEditing ? (
         <textarea
+          className="title"
           rows="1"
-          cols="50"
+          cols="30"
           value={title}
           onChange={handleChange}
           onBlur={handleClick}
@@ -30,7 +32,7 @@ const Title = ({ value, onChange }) => {
         />
       ) : (
         <div onClick={handleClick}>
-          <h1>{title || "Your Title..."}</h1>
+          <h1 className="title">{title || "Your Title..."}</h1>
         </div>
       )}
     </div>

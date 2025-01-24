@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-
 const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
     const canvasRef1 = useRef(null); // Для обычных боксов
     const canvasRef2 = useRef(null); // Для заполненных боксов
@@ -30,9 +29,8 @@ const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
         'G21': '128,128,0', // оливковый
         'G22': '230,230,250', // лаванда
         'X': '255,105,180', // ярко-розовый
-        'Y': '0,191,255' // глубокий небесный синий 
+        'Y': '0,191,255' // глубокий небесный синий
     };
-
 
     const drawBoxes = (canvas, imageUrl, boxes) => {
         const context = canvas.getContext('2d');
@@ -108,30 +106,32 @@ const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
                 <canvas ref={canvasRef2} style={{ border: '1px solid black' }} />
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                {Object.entries(boxes).flatMap(([classID, boxArray]) => 
-                    boxArray.map((box, index) => {
-                        const [x1, y1, x2, y2] = box;
-                        const width = x2 - x1;
-                        const height = y2 - y1;
+                {Object.entries(boxes).flatMap(([classID, boxArray]) => (
+                    <div key={classID} style={{ margin: '1%' }}>
+                        <figcaption>{classID}</figcaption>
+                        {boxArray.map((box, index) => {
+                            const [x1, y1, x2, y2] = box;
+                            const width = x2 - x1;
+                            const height = y2 - y1;
 
-                        return (
-                            <>
-                            <figcaption>{classID}</figcaption>
-                            <div 
-                                key={`${classID}-${index}`}
-                                style={{
-                                    width: width,
-                                    height: height,
-                                    backgroundImage: `url(${imageURL})`,
-                                    backgroundPosition: `-${x1}px -${y1}px`,
-                                    backgroundSize: 'initial', 
-                                    border: '1px solid rgba(0, 0, 0, 0.5)',
-                                }}
-                            />
-                            </>
-                        );
-                    })
-                )}
+                            return (
+                                <div
+                                    key={`${classID}-${index}`}
+                                    style={{
+                                        clear: 'both',
+                                        width: width,
+                                        height: height,
+                                        backgroundImage: `url(${imageURL})`,
+                                        backgroundPosition: `-${x1}px -${y1}px`,
+                                        backgroundSize: 'initial',
+                                        border: '1px solid rgba(0, 0, 0, 0.5)',
+                                        margin: '10%'
+                                    }}
+                                />
+                            );
+                        })}
+                    </div>
+                ))}
             </div>
         </>
     );

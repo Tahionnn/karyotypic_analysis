@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 
 
-
 class ImageBase(BaseModel):
     image_src: bytes
     boxes: Optional[Dict[str, List[List[float]]]]

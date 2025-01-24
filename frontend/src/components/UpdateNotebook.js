@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import '../App.css'; 
+
 
 const UpdateNotebook = ({ title, comment }) => {
     const { notebook_id } = useParams();
@@ -44,7 +46,7 @@ const UpdateNotebook = ({ title, comment }) => {
 
     return (
         <div>
-            <button onClick={handleSubmit} disabled={isSending}>
+            <button className='submit' onClick={handleSubmit} disabled={isSending}>
                 {isSending ? 'Обновление...' : 'Обновить Ноутбук'}
             </button>
             {success && <p>Ноутбук обвнолен!</p>}

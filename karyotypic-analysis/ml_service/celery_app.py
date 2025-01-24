@@ -2,10 +2,10 @@ from celery import Celery
 
 
 app = Celery(
-    'ml',
-    broker='amqp://rmuser:rmpassword@rabbitmq:5672/',
+    "ml",
+    broker="amqp://rmuser:rmpassword@rabbitmq:5672/",
     backend="redis://redis:6379",
-    include=['ml.tasks']
+    include=["ml.tasks"],
 )
 
 

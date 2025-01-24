@@ -9,24 +9,24 @@ const Registration = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null); 
+    const [error, setError] = useState(null);
 
-    const login =  async (e) => {
+    const login = async (e) => {
         e.preventDefault();
-        setError(null); 
+        setError(null);
         if (!username || !email || !password) {
             setError("Username, email and password are required.");
             return;
         }
-        
+
         try {
             const response = await axios.post('http://127.0.0.1:8001/register', {
-                "username":  username,
+                "username": username,
                 "email": email,
                 "password": password
             });
             navigate("/");
-        } catch(err) {
+        } catch (err) {
             if (err.response) {
                 console.error("Error response from server:", err.response);
                 console.error("Error details:", err.response.data.detail);
@@ -35,7 +35,7 @@ const Registration = () => {
             }
         }
     };
-    
+
     return (
         <>
             <h1>Registration page</h1>
@@ -71,12 +71,12 @@ const Registration = () => {
                         />
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button onClick={() => {navigate("/")}}>Login</button>
+                    <button onClick={() => { navigate("/") }}>Login</button>
                     <button type="submit" disabled={!username || !password}>Register</button>
                 </form>
             )}
         </>
-      );
+    );
 };
 
 export default Registration;

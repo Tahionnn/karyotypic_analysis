@@ -44,13 +44,21 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 
 
 async def authenticate_user(
-        username_or_email: str, 
-        password: str, 
+    username_or_email: str,
+    password: str,
 ):
     async with async_session_maker() as session:
-        result_user = await session.execute(select(User).where(or_(User.username == username_or_email, User.email == username_or_email)))
-        user= result_user.scalar_one_or_none()
-    if not user or verify_password(plain_password=password, hashed_password=user.password) is False:
+        result_user = await session.execute(
+            select(User).where(
+                or_(User.username == username_or_email, User.email == username_or_email)
+            )
+        )
+        user = result_user.scalar_one_or_none()
+    if (
+        not user
+        or verify_password(plain_password=password, hashed_password=user.password)
+        is False
+    ):
         return None
     return user
 
@@ -72,7 +80,9 @@ async def get_current_user(
     except InvalidTokenError:
         raise credentials_exception
     async with async_session_maker() as session:
-        result_user = await session.execute(select(User).where(User.username == token_data.username))
+        result_user = await session.execute(
+            select(User).where(User.username == token_data.username)
+        )
         user = result_user.scalar_one_or_none()
     if user is None:
         raise credentials_exception

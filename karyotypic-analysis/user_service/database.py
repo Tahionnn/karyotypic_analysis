@@ -8,7 +8,7 @@ from datetime import datetime
 from fastapi import HTTPException
 
 
-DATABASE_URL = 'postgresql+asyncpg://admin:password@postgres:5432/postgres'
+DATABASE_URL = "postgresql+asyncpg://admin:password@postgres:5432/postgres"
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
@@ -22,7 +22,7 @@ class Base(AsyncAttrs, DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f'{cls.__name__.lower()}'   
+        return f"{cls.__name__.lower()}"
 
     created_at: Mapped[created_at]
     updated_at_at: Mapped[updated_at]

@@ -6,7 +6,7 @@ from ml.YOLOv10 import YOLOv10
 from ml.utils import rescale_boxes
 
 
-path="/app/ml_service/models/best.onnx"
+path = "/app/ml_service/models/best.onnx"
 model = YOLOv10(model_path=path)
 model.load()
 
@@ -27,7 +27,32 @@ def predict(self, image: bytes):
         height, width = original_shape[:2]
         boxes = rescale_boxes(boxes=boxes, img_height=height, img_width=width)
 
-        class_dict = ['A1', 'A2', 'A3', 'B4', 'B5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'D13', 'D14', 'D15', 'E16', 'E17', 'E18', 'F19', 'F20', 'G21', 'G22', 'X', 'Y']
+        class_dict = [
+            "A1",
+            "A2",
+            "A3",
+            "B4",
+            "B5",
+            "C6",
+            "C7",
+            "C8",
+            "C9",
+            "C10",
+            "C11",
+            "C12",
+            "D13",
+            "D14",
+            "D15",
+            "E16",
+            "E17",
+            "E18",
+            "F19",
+            "F20",
+            "G21",
+            "G22",
+            "X",
+            "Y",
+        ]
         class_images = {class_name: [] for class_name in class_dict}
 
         for i, box in enumerate(boxes):
@@ -42,7 +67,7 @@ def predict(self, image: bytes):
                 object_image = [x1, y1, x2, y2]
                 class_images[class_name].append(object_image)
 
-        result = {'boxes': class_images}
+        result = {"boxes": class_images}
         return result
 
     except Exception as e:

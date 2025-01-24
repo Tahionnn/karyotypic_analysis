@@ -7,7 +7,7 @@ from ml.models import ResponseModel
 from ml.tasks import predict
 
 
-ml_router = APIRouter(prefix='/ml', tags=['Model endpoints'])
+ml_router = APIRouter(prefix="/ml", tags=["Model endpoints"])
 
 
 @ml_router.post("/predict")
@@ -21,6 +21,3 @@ async def get_predictions(file: UploadFile = File(...)) -> ResponseModel:
         return predictions
     except TimeoutError:
         return {"error": "Task too long too complete"}
-
-    
-

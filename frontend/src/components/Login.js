@@ -8,16 +8,16 @@ const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null); 
+    const [error, setError] = useState(null);
 
-    const login =  async (e) => {
+    const login = async (e) => {
         e.preventDefault();
-        setError(null); 
+        setError(null);
         if (!username || !password) {
             setError("Username and password are required.");
             return;
         }
-        
+
         try {
             console.log("Username:", username);
             console.log("Password:", password);
@@ -26,7 +26,7 @@ const Login = () => {
                     username: username,
                     password: password,
                     grant_type: "password"
-                }), 
+                }),
                 {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -37,7 +37,7 @@ const Login = () => {
             setToken(access_token);
             localStorage.setItem('user_id', response.data.user.id);
             navigate("/app");
-        } catch(err) {
+        } catch (err) {
             if (err.response) {
                 console.error("Error response from server:", err.response);
                 console.error("Error details:", err.response.data.detail);
@@ -46,7 +46,7 @@ const Login = () => {
             }
         }
     };
-    
+
     return (
         <>
             <h1>Login page</h1>
@@ -73,12 +73,12 @@ const Login = () => {
                         />
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button onClick={() => {navigate("/registration")}}>Registration</button>
+                    <button onClick={() => { navigate("/registration") }}>Registration</button>
                     <button type="submit" disabled={!username || !password}>Login</button>
                 </form>
             )}
         </>
-      );
+    );
 };
 
 export default Login;

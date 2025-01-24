@@ -1,5 +1,6 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import styles from "../App.css";
 
 const MarkdownEditor = ({ value, onChange }) => {
   const [markdown, setMarkdown] = useState(value || '');
@@ -23,6 +24,7 @@ const MarkdownEditor = ({ value, onChange }) => {
       <h1>Комментарии к анализу</h1>
       {isEditing ? (
         <textarea
+          className="textarea"
           rows="10"
           cols="50"
           value={markdown}
@@ -32,7 +34,7 @@ const MarkdownEditor = ({ value, onChange }) => {
         />
       ) : (
         <div onClick={handleClick}>
-          <ReactMarkdown>{markdown || "Нажмите здесь, чтобы добавить комментарий..."}</ReactMarkdown>
+          <ReactMarkdown className="textarea">{markdown || "Нажмите здесь, чтобы добавить комментарий..."}</ReactMarkdown>
         </div>
       )}
     </div>

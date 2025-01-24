@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Profile from './Profile.js';
+import styles from "../App.css";
+
 
 const SavedNotebooks = () => {
     const [notebooks, setNotebooks] = useState([]);
@@ -32,17 +35,16 @@ const SavedNotebooks = () => {
 
     return (
         <div>
+            <Profile />
             <h2>Сохраненные Ноутбуки</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <ul>
                 {notebooks.map((notebook) => (
-                    <li key={notebook.id}>
-                        <button onClick={() => handleClick(notebook.id)}>
+                    <div key={notebook.id}>
+                        <button className='notebook' onClick={() => handleClick(notebook.id)}>
                             {notebook.title}
                         </button>
-                    </li>
+                    </div>
                 ))}
-            </ul>
         </div>
     );
 };

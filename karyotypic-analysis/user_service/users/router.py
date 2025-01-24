@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 import base64
 
 
-user_router = APIRouter(prefix='/user', tags=['Users methods'])
+user_router = APIRouter(prefix="/user", tags=["Users methods"])
 
 
 @user_router.get("/users/me/", response_model=UserRegister)
@@ -33,16 +33,15 @@ async def delete_user_by_id(
 
     if user is None:
         raise HTTPException(status_code=404, detail="No matches found")
-    
+
     await session.delete(user)
 
     await commit_session(session)
-        
+
     return {
-        'response': Response(status_code=200),
-        'message': f'user with id={user_id} was deleted sucessfully'
-        }
- 
+        "response": Response(status_code=200),
+        "message": f"user with id={user_id} was deleted sucessfully",
+    }
 
 
 @user_router.get("/get/notebooks_list")
@@ -50,7 +49,9 @@ async def get_notebooks_list(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> List[Dict[str, Any]]:
-    query = select(Notebook.id.label("id"), Notebook.title.label("title")).where(Notebook.user_id == user.id)
+    query = select(Notebook.id.label("id"), Notebook.title.label("title")).where(
+        Notebook.user_id == user.id
+    )
     query_result = await session.execute(query)
     notebooks = query_result.all()
 

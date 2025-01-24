@@ -5,6 +5,7 @@ import Title from './Title';
 import BoxDrawer from './BoxDrawer';
 import MarkdownEditor from './MarkdownEditor';
 import UpdateNotebook from './UpdateNotebook';
+import '../App.css';
 
 const NotebookDetail = () => {
     const { notebook_id } = useParams();
@@ -27,7 +28,7 @@ const NotebookDetail = () => {
                 setError('Token not found. Please log in again.');
                 return;
             }
-            
+
             try {
                 const response = await axios.get(`http://127.0.0.1:8001/notebooks/get/${notebook_id}`, {
                     headers: {
@@ -58,7 +59,7 @@ const NotebookDetail = () => {
                     setError('Comment data is missing');
                 }
 
-                let base64Image = response.data.image_src; 
+                let base64Image = response.data.image_src;
 
                 if (base64Image.startsWith('dataimage/jpegbase64')) {
                     base64Image = base64Image.replace('dataimage/jpegbase64', '');
@@ -112,34 +113,36 @@ const NotebookDetail = () => {
 
     return (
         <>
+            <div style={{ padding: '2%' }}>
+                <button className='notebook' onClick={() => { navigate("/app/") }}>Назад</button>
+            </div>
             {error && <p>{error}</p>}
             {loadingImage ? (
                 <p>Loading image...</p>
             ) : (
                 imageURL ? (
-                    <>
-                    <Title value={title} onChange={handleTitleChange} />
-                    <figure>
-                        <figcaption>Оригинальное изображение</figcaption>
-                        <img src={imageURL} alt="Uploaded" />
-                    </figure>
-                    <figure>
-                        <figcaption>Bounding Boxes</figcaption>
-                        {prediction && prediction.boxes && (
-                            <BoxDrawer imageURL={imageURL} prediction={prediction} originalShape={originalShape} />
-                        )}
-                    </figure>
-                    <MarkdownEditor value={comment} onChange={handleMarkdownChange} />
-                    <UpdateNotebook 
-                    title={title}
-                    comment={comment}
-                    />
-                    </>
+                    <div className='notebookDisplay'>
+                        <Title value={title} onChange={handleTitleChange} />
+                        <figure>
+                            <figcaption>Оригинальное изображение</figcaption>
+                            <img src={imageURL} alt="Uploaded" />
+                        </figure>
+                        <figure>
+                            <figcaption>Bounding Boxes</figcaption>
+                            {prediction && prediction.boxes && (
+                                <BoxDrawer imageURL={imageURL} prediction={prediction} originalShape={originalShape} />
+                            )}
+                        </figure>
+                        <MarkdownEditor value={comment} onChange={handleMarkdownChange} />
+                        <UpdateNotebook
+                            title={title}
+                            comment={comment}
+                        />
+                    </div>
                 ) : (
                     <p>No image available.</p>
                 )
             )}
-            <button onClick={() => {navigate("/app/")}}>Назад</button>
         </>
     );
 };

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../App.css';
 
 const SaveResults = ({ title, image_src, boxes, comment }) => {
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false); 
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (event) => {
         setIsSending(true);
@@ -25,7 +26,7 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
                 comment: comment,
             }
         };
-        
+
         console.log('Отправляемые данные:', JSON.stringify(data, null, 2));
 
         try {
@@ -46,7 +47,7 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
 
     return (
         <div>
-            <button onClick={handleSubmit} disabled={isSending}>
+            <button className='submit' onClick={handleSubmit} disabled={isSending}>
                 {isSending ? 'Сохранение...' : 'Сохранить Ноутбук'}
             </button>
             {success && <p>Ноутбук сохранен!</p>}
