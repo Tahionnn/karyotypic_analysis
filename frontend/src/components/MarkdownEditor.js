@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const MarkdownEditor = ({ onChange }) => {
-  const [markdown, setMarkdown] = useState('');
+const MarkdownEditor = ({ value, onChange }) => {
+  const [markdown, setMarkdown] = useState(value || '');
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setMarkdown(value);
+  }, [value]);
 
   const handleChange = (event) => {
     setMarkdown(event.target.value);

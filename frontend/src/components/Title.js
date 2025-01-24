@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Title = ({ onChange }) => {
-  const [title, setTitle] = useState('');
+const Title = ({ value, onChange }) => {
+  const [title, setTitle] = useState(value || '');
   const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+      setTitle(value);
+    }, [value]);
 
   const handleChange = (event) => {
     setTitle(event.target.value);

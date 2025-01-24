@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const SaveResults = ({ title, image_src, boxes, comment }) => {
+const UpdateNotebook = ({ title, comment }) => {
+    const { notebook_id } = useParams();
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false); 
@@ -17,10 +19,6 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
 
         const data = {
             title: title,
-            image: {
-                image_src: image_src,
-                boxes: boxes,
-            },
             comment: {
                 comment: comment,
             }
@@ -29,7 +27,7 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
         console.log('Отправляемые данные:', JSON.stringify(data, null, 2));
 
         try {
-            const request = await axios.post('http://127.0.0.1:8001/notebooks/add', data, {
+            const request = await axios.put(`http://127.0.0.1:8001/notebooks/update/${notebook_id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -38,7 +36,7 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
             setSuccess(true);
         } catch (error) {
             console.error('Error sending data', error.response ? error.response.data : error);
-            setError(`Ошибка при сохранении ноутбука. Попробуйте еще раз. ${error}`);
+            setError(`Ошибка при обновлении ноутбука. Попробуйте еще раз. ${error}`);
         } finally {
             setIsSending(false);
         }
@@ -47,12 +45,12 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
     return (
         <div>
             <button onClick={handleSubmit} disabled={isSending}>
-                {isSending ? 'Сохранение...' : 'Сохранить Ноутбук'}
+                {isSending ? 'Обновление...' : 'Обновить Ноутбук'}
             </button>
-            {success && <p>Ноутбук сохранен!</p>}
+            {success && <p>Ноутбук обвнолен!</p>}
             {error && <p>{error}</p>}
         </div>
     );
 };
 
-export default SaveResults;
+export default UpdateNotebook;

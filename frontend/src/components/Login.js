@@ -35,6 +35,7 @@ const Login = () => {
             );
             const { access_token } = response.data;
             setToken(access_token);
+            localStorage.setItem('user_id', response.data.user.id);
             navigate("/app");
         } catch(err) {
             if (err.response) {

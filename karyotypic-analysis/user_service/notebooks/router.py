@@ -3,7 +3,7 @@ from typing import Annotated
 from ..models import Notebook, Image, Comment
 from ..models import User
 from ..database import get_session
-from .schemas import NotebookPublic, ImageBase
+from .schemas import NotebookPublic, ImageBase, UpdateNotebook
 from ..utils import commit_session
 from ..auth.router import *
 from ..auth.utils import get_current_user
@@ -21,12 +21,9 @@ async def add_notebook(
     current_user: Annotated[User, Depends(get_current_user)], 
     session: AsyncSession = Depends(get_session),
 ):
-    if notebook.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="User ID does not match current user")
-    
     db_notebook = Notebook(
         title=notebook.title, 
-        user_id=notebook.user_id
+        user_id=current_user.id
     )
     session.add(db_notebook)
     await commit_session(session)
@@ -37,7 +34,7 @@ async def add_notebook(
             image_src=image_data, 
             boxes=notebook.image.boxes, 
             notebook_id=db_notebook.id, 
-            user_id=notebook.image.user_id
+            user_id=current_user.id
         )
         session.add(db_image)
 
@@ -45,7 +42,7 @@ async def add_notebook(
         db_comment = Comment(
             comment=notebook.comment.comment, 
             notebook_id=db_notebook.id, 
-            user_id=notebook.comment.user_id
+            user_id=current_user.id
         )
         session.add(db_comment)
 
@@ -122,11 +119,11 @@ async def delete_notebook_by_id(
         }
 
 
-@notebook_router.delete("/update/{notebook_id}")
+@notebook_router.put("/update/{notebook_id}")
 async def update_notebook_by_id(
     current_user: Annotated[User , Depends(get_current_user)],
     notebook_id: int,
-    notebook: NotebookPublic,
+    notebook: UpdateNotebook,
     session: AsyncSession = Depends(get_session),
 ):
     result = await session.execute(select(Notebook).where(Notebook.id == notebook_id))
@@ -135,32 +132,18 @@ async def update_notebook_by_id(
     if db_notebook is None:
         raise HTTPException(status_code=404, detail="Notebook not found")
 
-    if notebook.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="User  ID does not match current user")
-
     db_notebook_data = {
         "title": notebook.title,
-        "user_id": notebook.user_id
+        "user_id": current_user.id
     }
     update_notebook_stmt = update(Notebook).where(Notebook.id == notebook_id).values(**db_notebook_data)
     await session.execute(update_notebook_stmt)
-
-    if notebook.image:
-        image_data = base64.b64decode(notebook.image.image_src)
-        db_image_data = {
-            "image_src": image_data,
-            "boxes": notebook.image.boxes,
-            "notebook_id": notebook_id,
-            "user_id": notebook.image.user_id
-        }
-        update_image_stmt = update(Image).where(Image.notebook_id == notebook_id).values(**db_image_data)
-        await session.execute(update_image_stmt)
 
     if notebook.comment:
         db_comment_data = {
             "comment": notebook.comment.comment,
             "notebook_id": notebook_id,
-            "user_id": notebook.comment.user_id
+            "user_id": current_user.id
         }
         update_comment_stmt = update(Comment).where(Comment.notebook_id == notebook_id).values(**db_comment_data)
         await session.execute(update_comment_stmt)

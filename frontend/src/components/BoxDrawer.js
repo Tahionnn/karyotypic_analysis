@@ -33,6 +33,7 @@ const BoxDrawer = ({ imageURL, prediction, originalShape }) => {
         'Y': '0,191,255' // глубокий небесный синий 
     };
 
+
     const drawBoxes = (canvas, imageUrl, boxes) => {
         const context = canvas.getContext('2d');
         const img = new Image();

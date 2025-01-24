@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, status, Depends, APIRouter, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from typing import Annotated
+from typing import Annotated, List, Dict, Any
 from ..models import User
 from ..models import Notebook, Image, Comment
 from ..database import get_session
@@ -47,35 +47,14 @@ async def delete_user_by_id(
 
 @user_router.get("/get/notebooks_list")
 async def get_notebooks_list(
-    user: Annotated[User, Depends(get_current_user)],
+    user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
-):
-    query = (
-        select(
-            Notebook.id.label("id"),
-            Notebook.title.label("title"),
-            Image.image_src.label("image_src"),
-            Image.boxes.label("boxes"),
-            Comment.comment.label("comment")
-        )
-        .join(Image, Image.notebook_id == Notebook.id)
-        .join(Comment, Comment.notebook_id == Notebook.id)
-        .where(Notebook.user_id == user.id)
-    )
-
+) -> List[Dict[str, Any]]:
+    query = select(Notebook.id.label("id"), Notebook.title.label("title")).where(Notebook.user_id == user.id)
     query_result = await session.execute(query)
     notebooks = query_result.all()
 
     if not notebooks:
         raise HTTPException(status_code=404, detail="No matches found")
 
-    return [
-        {
-            "notebook_id": notebook.id,
-            "notebook_title": notebook.title,
-            "image": base64.b64encode(notebook.image_src).decode('utf-8') if notebook.image_src else None,
-            "boxes": notebook.boxes,
-            "comment": notebook.comment
-        }
-        for notebook in notebooks
-    ]
+    return [{"id": notebook.id, "title": notebook.title} for notebook in notebooks]
