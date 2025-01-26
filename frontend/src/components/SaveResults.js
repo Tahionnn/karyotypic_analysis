@@ -30,7 +30,7 @@ const SaveResults = ({ title, image_src, boxes, comment }) => {
         console.log('Отправляемые данные:', JSON.stringify(data, null, 2));
 
         try {
-            const request = await axios.post('http://127.0.0.1:8001/notebooks/add', data, {
+            const request = await axios.post('/user/notebooks/add', data, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

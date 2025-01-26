@@ -93,7 +93,37 @@ services:
     depends_on:
       - postgres
 
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+      - user
+      - ml
+  
+#  frontend_in_development:
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#      target: development
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app
+#      - ./frontend/node_modules:/app/node_modules
+#    depends_on:
+#      - redis
+#      - rabbitmq
+#      - postgres
+#     - user
+#      - ml
+  
 volumes:
   pgdata:
     driver: local

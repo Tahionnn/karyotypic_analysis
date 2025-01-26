@@ -12,7 +12,7 @@ const Profile = () => {
     const getUser = async () => {
         const token = fetchToken();
         try {
-            const response = await axios.get('http://127.0.0.1:8001/user/users/me/', {
+            const response = await axios.get('/user/user/users/me/', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

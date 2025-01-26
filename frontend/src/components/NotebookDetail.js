@@ -30,7 +30,7 @@ const NotebookDetail = () => {
             }
 
             try {
-                const response = await axios.get(`http://127.0.0.1:8001/notebooks/get/${notebook_id}`, {
+                const response = await axios.get(`/user/notebooks/get/${notebook_id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

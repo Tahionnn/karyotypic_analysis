@@ -29,7 +29,7 @@ const UpdateNotebook = ({ title, comment }) => {
         console.log('Отправляемые данные:', JSON.stringify(data, null, 2));
 
         try {
-            const request = await axios.put(`http://127.0.0.1:8001/notebooks/update/${notebook_id}`, data, {
+            const request = await axios.put(`/user/notebooks/update/${notebook_id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

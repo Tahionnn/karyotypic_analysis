@@ -24,6 +24,19 @@ const ImageUploader = () => {
     const handleFile = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setTitle('');
+        setComment('');
+
+        const file = selectedFile;
+
+        if (!file) {
+            console.error('No file selected');
+            return; 
+        }
 
         const img = new Image();
         const url = URL.createObjectURL(file);
@@ -42,15 +55,12 @@ const ImageUploader = () => {
         if (file) {
             reader.readAsDataURL(file);
         }
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+        
         const formData = new FormData();
         formData.append('file', selectedFile);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/ml/predict', formData);
+            const response = await axios.post('/ml/ml/predict', formData);
             const predictionData = {
                 boxes: response.data.boxes,
                 classes: response.data.classes,
@@ -92,7 +102,7 @@ const ImageUploader = () => {
                     </form>
                     {prediction.boxes && Object.keys(prediction.boxes).length > 0 && (
                         <div className='notebookDisplay'>
-                            <Title onChange={handleTitleChange} />
+                            <Title value={title} onChange={handleTitleChange} />
                             <figure>
                                 <figcaption>Оригинальное изображение</figcaption>
                                 <img src={imageURL} alt="Uploaded" />
@@ -101,7 +111,7 @@ const ImageUploader = () => {
                                 <figcaption>Bounding Boxes</figcaption>
                                 <BoxDrawer imageURL={imageURL} prediction={prediction} originalShape={originalShape} />
                             </figure>
-                            <MarkdownEditor onChange={handleMarkdownChange} />
+                            <MarkdownEditor value={comment} onChange={handleMarkdownChange} />
                             <SaveResults
                                 title={title}
                                 image_src={imageBase64}

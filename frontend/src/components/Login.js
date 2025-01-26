@@ -21,7 +21,7 @@ const Login = () => {
         try {
             console.log("Username:", username);
             console.log("Password:", password);
-            const response = await axios.post('http://127.0.0.1:8001/api/token',
+            const response = await axios.post('/user/api/token',
                 new URLSearchParams({
                     username: username,
                     password: password,

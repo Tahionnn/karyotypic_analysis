@@ -20,7 +20,7 @@ const Registration = () => {
         }
 
         try {
-            const response = await axios.post('http://127.0.0.1:8001/register', {
+            const response = await axios.post('/user/register', {
                 "username": username,
                 "email": email,
                 "password": password
