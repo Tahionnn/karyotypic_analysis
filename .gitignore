@@ -171,4 +171,4 @@ cython_debug/
 .pypirc
 
 # Configuration for Nginx
-./frontend/nginx.conf
+./frontend/nginx
