@@ -18,7 +18,7 @@ services:
     hostname: rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=rmuser
-      - RABBITMQ_DEFAULT_PASS_FILE=/run/secrets/rmpassword
+      - RABBITMQ_DEFAULT_PASS=rmpassword
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -31,14 +31,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    secrets:
-      - source: rmpassword
 
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_PASSWOR: password
       POSTGRES_DB: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
@@ -46,7 +45,7 @@ services:
     secrets:
       - source: postgres_password
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
+      - karyotypic_analysis_pgdata:/var/lib/postgresql/data/pgdata
     deploy:
       replicas: 1
       restart_policy:
@@ -103,7 +102,7 @@ services:
         condition: on-failure
 
   user:
-    image: noihat/karyotyp-user:1
+    image: noihat/karyotyp-user:2
     ports:
       - "8001:8001"
     deploy:
@@ -148,13 +147,10 @@ services:
 #      - ml
   
 volumes:
-  pgdata:
-    driver: local
+  karyotypic_analysis_pgdata:
+    external: true 
 
 secrets:
-  rmpassword:
-    name: rmpassword
-    external: true
   postgres_password:
     name: postgres_password
     external: true
