@@ -102,7 +102,7 @@ services:
         condition: on-failure
 
   user:
-    image: noihat/karyotyp-user:2
+    image: noihat/karyotyp-user:1
     ports:
       - "8001:8001"
     deploy:
@@ -114,11 +114,17 @@ services:
         order: start-first
       restart_policy:
         condition: on-failure
+    secrets:
+      - source: jwt_key
+      - source: algorithm
+      - source: token_expire
+      - source: postgres_password
 
   frontend:
-    image: noihat/karyotyp-front:1
+    image: noihat/karyotyp-front:2
     ports:
       - "80:80"
+      - "443:443"
     deploy:
       replicas: 3
       update_config:
@@ -128,6 +134,9 @@ services:
         order: start-first
       restart_policy:
         condition: on-failure
+    secrets:
+      - source: site.crt
+      - source: site.key
   
 #  frontend_in_development:
 #    build:
@@ -153,4 +162,19 @@ volumes:
 secrets:
   postgres_password:
     name: postgres_password
+    external: true
+  jwt_key:
+    name: jwt_key
+    external: true
+  algorithm:
+    name: algorithm
+    external: true
+  token_expire:
+    name: token_expire
+    external: true
+  site.crt:
+    name: site.crt
+    external: true
+  site.key:
+    name: site.key
     external: true

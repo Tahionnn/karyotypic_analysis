@@ -2,13 +2,17 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
+from .auth.utils import read_secret
 
 from typing import Annotated
 from datetime import datetime
 from fastapi import HTTPException
 
 
-DATABASE_URL = "postgresql+asyncpg://admin:password@postgres:5432/postgres"
+password = read_secret("postgres_password")
+
+
+DATABASE_URL = f"postgresql+asyncpg://admin:{password}@postgres:5432/postgres"
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

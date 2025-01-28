@@ -14,9 +14,18 @@ from ..models import User
 from ..database import get_session, async_session_maker
 
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+def read_secret(secret_name: str) -> str:
+    secret_path = f"/run/secrets/{secret_name}"
+    try:
+        with open(secret_path, "r") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Secret {secret_name} not found")
+
+
+SECRET_KEY = read_secret("jwt_key")
+ALGORITHM = read_secret("algorithm")
+ACCESS_TOKEN_EXPIRE_MINUTES = read_secret("token_expire")
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
