@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
-from .auth.utils import read_secret
+from .utils import read_secret
 
 from typing import Annotated
 from datetime import datetime
