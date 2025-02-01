@@ -90,6 +90,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
+    env_file: ".env"
     depends_on:
       - postgres
 

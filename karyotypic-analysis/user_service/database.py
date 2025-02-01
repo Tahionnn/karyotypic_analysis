@@ -7,8 +7,14 @@ from typing import Annotated
 from datetime import datetime
 from fastapi import HTTPException
 
+import os
+from dotenv import load_dotenv
 
-DATABASE_URL = "postgresql+asyncpg://admin:password@postgres:5432/postgres"
+
+load_dotenv()
+db_password = os.getenv("postgres_password")
+
+DATABASE_URL = f"postgresql+asyncpg://admin:{db_password}@postgres:5432/postgres"
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
