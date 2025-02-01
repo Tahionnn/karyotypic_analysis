@@ -1,6 +1,6 @@
 # karyotypic_analysis ml_service
 ## Введение
-Этот сервис отвечает за инференс модели. Нейросеть запускается в среде [**ONNX Runtime**](https://onnxruntime.ai/docs/).
+Этот сервис отвечает за инференс модели. Нейросеть запускается в среде [**ONNX Runtime**](https://onnxruntime.ai/docs/). API разработано с использованием FastAPI.
 
 Cтруктура проекта: 
 ```bash

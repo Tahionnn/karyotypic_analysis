@@ -1,6 +1,6 @@
 # karyotypic_analysis user_service
 ## Введение
-Этот сервис представляет собой API БД пользователей. В качестве БД выступает [**PostgreSQL**](https://www.postgresql.org/). Для реализации миграций используется [**Alembic**](https://alembic.sqlalchemy.org/en/latest/).
+Этот сервис представляет собой API БД пользователей, разработанное с использованием FastAPI. В качестве БД выступает [**PostgreSQL**](https://www.postgresql.org/). Для реализации миграций используется [**Alembic**](https://alembic.sqlalchemy.org/en/latest/).
 
 Cтруктура проекта: 
 ```bash
@@ -37,8 +37,45 @@ user_service
 └── wait-for-db.sh              # Скрипт для ожидания готовности базы данных
 ```
 Под ноутбуками подразумевается совокупность результатов нейросети и комментариев пользователей к ним. 
-## Эндпоинты
 <br></br>
+## Струтура БД
+
+## Сущности
+
+### User
+- **id** (PK)
+- **username** (UNIQUE)
+- **email** (UNIQUE)
+- **password**
+
+### Notebook
+- **id** (PK)
+- **title**
+- **user_id** (FK → User.id)
+
+### Image
+- **id** (PK)
+- **image_src**
+- **boxes**
+- **notebook_id** (FK → Notebook.id)
+- **user_id** (FK → User.id)
+
+### Comment
+- **id** (PK)
+- **comment**
+- **notebook_id** (FK → Notebook.id)
+- **user_id** (FK → User.id)
+
+### Связи
+
+- **User** 1 --- * **Notebook**
+- **Notebook** 1 --- * **Image**
+- **Notebook** 1 --- * **Comment**
+- **User** 1 --- * **Image**
+- **User** 1 --- * **Comment**
+<br></br>
+## Эндпоинты
+
 ## User Methods
 ### Эндпоинт: /user/users/me/
 
