@@ -8,6 +8,11 @@
  1. [Обучение нейросети](https://www.kaggle.com/code/kirilllazutkin/yolov10-for-karyotype)
  2. [Оптимизация нейросети](https://www.kaggle.com/code/kirilllazutkin/optimize-yolo-for-karyotype)
 
+Более подробная информация о техническом устройстве проекта:
+1. [Описание сервиса инференса нейросети](karyotypic-analysis/ml_service/README.md)
+2. [Описание API БД](karyotypic-analysis/user_service/README.md)
+3. [Описание пользовательского интерфейса](frontend/UI_Guide/UserGuide.md)
+
  ## Установка и запуск проекта
  Перед установкой и запуском убедитесь, что у вас установлен [**Docker**](https://docs.docker.com/).
 
@@ -20,11 +25,18 @@
 
  Запуск проекта:
  
- 1. Перейдите в корень проекта: 
-  ```bash
- cd karyotypic_analysis
+  1. Перейдите в папку **frontend** и создайте директорию **nginx**
+ ```bash
+ cd karyotypic_analysis/frontend && mkdir nginx
  ```
- 2. Запустите docker-compose.yaml:
+ 2. Создайте nginx.conf и default.conf
+ 3.  Для корректной работы проекта требуется создать .env файл в корне проекта и добавьте следующие секреты::
+
+    - postgres_password (пароль от БД)
+    - jwt_key (ключ шифрования JWT-токенов)
+    - algorithm (алгоритм шифрования JWT-токенов. Например **HS256**)
+    - token_expire (срок годности JWT-токенов)
+ 4. В корне проекта запустите docker-compose.yaml:
  ```bash
  docker-compose up
  ```
@@ -43,7 +55,7 @@
  ```bash
  docker pull noihat/karyotyp-ml:1 && docker pull noihat/karyotyp-user:1 && docker pull noihat/karyotyp-frontend:2
  ```
- 5. Для корректной работы проекта требуется создаеть секреты. Используйте следующую команду:
+ 5. Для корректной работы проекта требуется создать секреты. Используйте следующую команду:
   ```bash
  echo "YOUR SECRET" | docker secert create "SECRET NAME" -
  ```
@@ -60,7 +72,7 @@
  docker stack deploy -c docker-compose.yaml karyotyp
  ```
  ## Лицензия
- Этот проект лицензирован под MIT License - смотрите LICENSE для подробностей.
+ Этот проект лицензирован под MIT License - смотрите [LICENSE](LICENSE) для подробностей.
  ## Контакты 
  Если у вас есть вопросы, вы можете связаться со мной:
  - Почта: kirill.lazutkin@inbox.ru
